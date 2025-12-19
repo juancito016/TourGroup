@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, X, AlertTriangle, Utensils } from './ui/Icons';
+import { Plus, X, AlertTriangle, Utensils, Check } from './ui/Icons';
 import { validarReglasLogistica, obtenerPrecioPorPersona, formatearMoneda, obtenerLabelTour } from '../lib/utilidades';
 import { DatosCreacionGrupo, TipoTour } from '../types';
 import { CONFIG } from '../lib/constantes';

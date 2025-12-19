@@ -29,4 +29,5 @@ export interface DatosCreacionGrupo extends ReservaFormData {
   fecha: string;
   tipoJeep: TipoJeep;
   tipoTour: TipoTour;
+  detallesDieta?: string;
 }
