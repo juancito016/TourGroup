@@ -23,7 +23,7 @@ interface Props { isOpen: boolean; onClose: () => void; onCreate: (data: DatosCr
 export const ModalCrearGrupo: React.FC<Props> = ({ isOpen, onClose, onCreate }) => {
   const { control, register, handleSubmit, watch } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { fecha: '', paxIniciales: 1, tipoJeep: 'ESTANDAR', tipoTour: 'CLASICA', tipoDieta: 'NORMAL', nombreCompleto: '', email: '' }
+    defaultValues: { fecha: '', paxIniciales: 1, tipoJeep: 'ESTANDAR', tipoTour: 'CLASICA', tipoDieta: 'NORMAL', nombreCompleto: '', email: '', detallesDieta: '' }
   });
 
   const fecha = watch('fecha');
