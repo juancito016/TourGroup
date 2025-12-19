@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, X, Calendar, Check, AlertTriangle, Utensils } from './ui/Icons';
+import { Plus, X, AlertTriangle, Utensils } from './ui/Icons';
 import { validarReglasLogistica, obtenerPrecioPorPersona, formatearMoneda, obtenerLabelTour } from '../lib/utilidades';
-import { DatosCreacionGrupo, TipoJeep, TipoTour } from '../types';
+import { DatosCreacionGrupo, TipoTour } from '../types';
 import { CONFIG } from '../lib/constantes';
 
 const schema = z.object({
@@ -21,7 +21,7 @@ const schema = z.object({
 interface Props { isOpen: boolean; onClose: () => void; onCreate: (data: DatosCreacionGrupo) => void; }
 
 export const ModalCrearGrupo: React.FC<Props> = ({ isOpen, onClose, onCreate }) => {
-  const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
+  const { control, register, handleSubmit, watch } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { fecha: '', paxIniciales: 1, tipoJeep: 'ESTANDAR', tipoTour: 'CLASICA', tipoDieta: 'NORMAL', nombreCompleto: '', email: '' }
   });
@@ -29,7 +29,6 @@ export const ModalCrearGrupo: React.FC<Props> = ({ isOpen, onClose, onCreate }) 
   const fecha = watch('fecha');
   const paxIniciales = watch('paxIniciales');
   const tipoJeep = watch('tipoJeep');
-  const tipoTour = watch('tipoTour');
 
   const validacion = useMemo(() => validarReglasLogistica(fecha, paxIniciales), [fecha, paxIniciales]);
   const precioEstimado = obtenerPrecioPorPersona(paxIniciales);

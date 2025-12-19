@@ -2,6 +2,11 @@ export type TipoJeep = 'ESTANDAR' | 'PRIVADO';
 export type TipoDieta = 'NORMAL' | 'VEGETARIANO' | 'VEGANO' | 'CELIACO';
 export type TipoTour = 'TRES_DIAS' | 'CLASICA' | 'INVERSA';
 
+export interface FiltroBusqueda {
+  fecha?: string;
+  pax?: number;
+}
+
 export interface Viaje {
   id: number;
   fecha: string;

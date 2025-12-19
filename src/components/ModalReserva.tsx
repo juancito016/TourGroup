@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { X, Users, Utensils, Check, ArrowRight } from './ui/Icons';
+import { X, Users, Utensils, ArrowRight } from './ui/Icons';
 import { obtenerPrecioPorPersona, formatearMoneda, parsearFecha } from '../lib/utilidades';
 import { Viaje, ReservaFormData } from '../types';
 import { CONFIG } from '../lib/constantes';
