@@ -11,7 +11,13 @@ export const BuscadorHero: React.FC<Props> = ({ onSearch }) => {
   const [pax, setPax] = useState('1');
 
   const handleSearch = () => {
-    onSearch({ fecha, pax: parseInt(pax) });
+    // Si se ingresó una fecha, filtramos por fecha únicamente.
+    // Si no hay fecha, filtramos por cantidad de pasajeros.
+    if (fecha && fecha.trim() !== '') {
+      onSearch({ fecha });
+    } else {
+      onSearch({ pax: parseInt(pax) });
+    }
   };
 
   return (
