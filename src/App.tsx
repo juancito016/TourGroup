@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { BuscadorHero } from './components/BuscadorHero';
 import { TarjetaJeep } from './components/TarjetaJeep';
 import { ModalCrearGrupo } from './components/ModalCrearGrupo';
 import { ModalReserva } from './components/ModalReserva';
@@ -61,6 +62,7 @@ export default function App() {
   // Estado para gestionar qué viaje se está intentando reservar
   const [viajeSeleccionado, setViajeSeleccionado] = useState<Viaje | null>(null);
   const [trips, setTrips] = useState<Viaje[]>([]);
+  const [filtro, setFiltro] = useState<null | { fecha?: string; pax?: number }>(null);
 
   useEffect(() => {
     // Datos simulados iniciales
@@ -85,6 +87,11 @@ export default function App() {
     setTrips(prev => [nuevoViaje, ...prev]);
     console.log("Grupo creado con dieta:", data.tipoDieta);
     alert("¡Grupo Creado Exitosamente!");
+  };
+
+  const handleSearch = (f: { fecha?: string; pax?: number }) => {
+    // Guardamos el filtro; BuscadorHero ya envía solo fecha o pax (OR)
+    setFiltro(f);
   };
 
   // Manejo de apertura del modal de reserva
@@ -123,12 +130,44 @@ export default function App() {
       <HeroCarousel images={IMAGENES_SALAR} onCreateClick={() => setModalCrearOpen(true)} />
 
       <main className="max-w-7xl mx-auto px-4 mt-8">
+        <BuscadorHero onSearch={handleSearch} />
+
         <h2 className="text-2xl font-bold mb-6">Próximas Salidas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trips.map(trip => (
-            <TarjetaJeep key={trip.id} viaje={trip} onJoin={handleJoinClick} />
-          ))}
-        </div>
+
+        {/* Filtrado: si hay filtro aplicado, usamos filteredTrips */}
+        {useMemo(() => {
+          const filtered = (() => {
+            if (!filtro) return trips;
+            if (filtro.fecha) {
+              return trips.filter(t => t.fecha === filtro.fecha);
+            }
+            if (typeof filtro.pax === 'number') {
+              return trips.filter(t => (t.capacidadTotal - t.ocupantes) >= (filtro.pax || 0));
+            }
+            return trips;
+          })();
+
+          return (
+            <>
+              {filtro && (
+                <div className="mb-4 text-sm text-slate-300">
+                  Filtrando por: {filtro.fecha ? `Fecha ${filtro.fecha}` : `Pasajeros ${filtro.pax}`}
+                  <button className="ml-4 text-yellow-400 font-semibold" onClick={() => setFiltro(null)}>Limpiar</button>
+                </div>
+              )}
+
+              {filtered.length === 0 ? (
+                <div className="text-slate-400">No hay viajes que coincidan con el filtro.</div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filtered.map(trip => (
+                    <TarjetaJeep key={trip.id} viaje={trip} onJoin={handleJoinClick} />
+                  ))}
+                </div>
+              )}
+            </>
+          );
+        }, [trips, filtro])}
       </main>
 
       <ModalCrearGrupo isOpen={modalCrearOpen} onClose={() => setModalCrearOpen(false)} onCreate={handleCreate} />
